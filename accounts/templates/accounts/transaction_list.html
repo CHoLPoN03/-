@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>История транзакций</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+<h2>История транзакций</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Дебет</th>
+            <th>Кредит</th>
+            <th>Сумма</th>
+            <th>Описание</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for t in transactions %}
+        <tr {% if t.is_deleted %}class="table-danger"{% endif %}>
+            <td>{{ t.created_at }}</td>
+            <td>{{ t.debit_account.name }}</td>
+            <td>{{ t.credit_account.name }}</td>
+            <td>{{ t.amount }}</td>
+            <td>{{ t.description }}</td>
+            <td>
+                {% if not t.is_deleted %}
+                    <a class="btn btn-sm btn-warning" href="{% url 'delete_transaction' t.id %}">Удалить</a>
+                {% else %}
+                    Сторно выполнено
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<a class="btn btn-secondary" href="{% url 'account_list' %}">Счета</a>
+<a class="btn btn-success" href="{% url 'create_transaction' %}">Создать транзакцию</a>
+</body>
+</html>
